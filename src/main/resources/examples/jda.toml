@@ -1,0 +1,7 @@
+output_path = "target/JDA-Index.db"
+resource_paths = ["sample_projects/jda/JDA-master/src/main/java/"]
+allowed_packages = [
+    "*"
+]
+build_files = ["sample_projects/jda/JDA-master/build.gradle.kts"]
+maven_home = "/opt/maven"

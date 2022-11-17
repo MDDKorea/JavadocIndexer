@@ -1,0 +1,7 @@
+output_path = ""
+resource_paths = [
+    "../Bench-Sources/src/main/java"
+]
+allowed_packages = [
+    "*"
+]

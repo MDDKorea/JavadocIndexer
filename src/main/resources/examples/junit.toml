@@ -1,0 +1,13 @@
+output_path = "target/Junit-Index.db"
+resource_paths = [
+    "sample_projects/junit/junit5-main/junit-jupiter-api",
+    "sample_projects/junit/junit5-main/junit-jupiter-engine"
+]
+allowed_packages = [
+    "*"
+]
+build_files = [
+    "sample_projects/junit/junit5-main/junit-jupiter-api/junit-jupiter-api.gradle.kts",
+    "sample_projects/junit/junit5-main/junit-jupiter-engine/junit-jupiter-engine.gradle.kts"
+]
+maven_home = "/opt/maven"

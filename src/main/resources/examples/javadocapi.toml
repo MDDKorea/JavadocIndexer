@@ -1,0 +1,6 @@
+output_path = "target/Ourself-Index.db"
+resource_paths = ["src/main/java"]
+allowed_packages = [
+    "de.ialistannen.javadocapi"
+]
+output_timings = true

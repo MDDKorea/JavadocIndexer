@@ -1,0 +1,7 @@
+output_path = "target/ApFloat-Index.db"
+resource_paths = ["/home/i_al_istannen/.temp/Indizes/apfloat/apfloat/src/main/java"]
+allowed_packages = ["*"]
+build_files = [
+    "/home/i_al_istannen/.temp/Indizes/apfloat/pom.xml"
+]
+maven_home = "/opt/maven"

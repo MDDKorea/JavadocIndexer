@@ -1,0 +1,12 @@
+output_path = "target/Paper-Api-Index.db"
+resource_paths = ["/home/i_al_istannen/.temp/Indizes/Paper.zip"]
+allowed_packages = [
+    "*"
+]
+build_files = [
+    "/home/i_al_istannen/.temp/Indizes/Paper/test-plugin/build.gradle.kts",
+    "/home/i_al_istannen/.temp/Indizes/Paper/Paper-MojangAPI/build.gradle.kts",
+    "/home/i_al_istannen/.temp/Indizes/Paper/Paper-API/build.gradle.kts",
+    "/home/i_al_istannen/.temp/Indizes/Paper/build.gradle.kts"
+]
+maven_home = "/opt/maven"
