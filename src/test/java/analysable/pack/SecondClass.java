@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * I exist!
+ * I exist! And I link to string: {@link
+ *     java.lang.String}.
  */
 public abstract class SecondClass<T extends Comparable<T>>
     extends AbstractList<List<T>> implements List<List<T>> {

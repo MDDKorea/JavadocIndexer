@@ -14,11 +14,7 @@ public class Java11PlusLinkResolver implements LinkResolver {
     }
 
     String urlPart = formatNamePart(reference);
-    String module = reference.getModule()
-        .map(DocumentedElementReference::segment)
-        .map(Object::toString)
-        .filter(it -> !it.equals("unnamed module"))
-        .orElse("");
+    String module = reference.getModule().orElse("");
 
     if (!module.isEmpty()) {
       urlPart = module + "/" + urlPart;

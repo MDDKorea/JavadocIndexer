@@ -15,7 +15,7 @@ public interface LinkResolver {
     } else {
       urlPart = name.getType().map(DocumentedElementReference::toString).orElse("N/A");
     }
-    String moduleName = name.getModule().map(it -> it.segment().toString() + "/").orElse("");
+    String moduleName = name.getModule().map(it -> it + "/").orElse("");
 
     urlPart = urlPart
         .replaceFirst(Pattern.quote(moduleName), "")

@@ -21,7 +21,7 @@ public class ExternalJavadocAwareLinkResolver implements LinkResolver {
       DocumentedElementReference reference,
       String baseUrl
   ) {
-    String packageName = reference.getPackage().map(it -> it.segment().toString()).orElse("");
+    String packageName = reference.getPackage().orElse("");
 
     for (ExternalJavadocReference externalReference : externalJavadocReferences) {
       if (externalReference.packages().contains(packageName)) {

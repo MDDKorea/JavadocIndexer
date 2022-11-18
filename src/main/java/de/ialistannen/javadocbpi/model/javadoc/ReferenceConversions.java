@@ -58,6 +58,10 @@ public class ReferenceConversions {
   public static DocumentedElementReference getReference(CtPackage pack) {
     DocumentedElementReference parent;
     if (pack.getDeclaringPackage() == null || pack.getDeclaringPackage().isUnnamedPackage()) {
+      if (pack.getDeclaringModule().isUnnamedModule()) {
+        return DocumentedElementReference.root(PACKAGE, pack.getSimpleName());
+      }
+
       parent = getReference(pack.getDeclaringModule());
     } else {
       parent = getReference(pack.getDeclaringPackage());

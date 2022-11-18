@@ -133,6 +133,21 @@ public record DocumentedElementReference(
     return parts;
   }
 
+  public DocumentedElementReference withModule(DocumentedElementReference module) {
+    if (module.type() != MODULE) {
+      throw new IllegalArgumentException("Type of parent must be module, was " + module);
+    }
+    if (nullableParent == null || nullableParent.type() == MODULE) {
+      return new DocumentedElementReference(module, segment(), type());
+    }
+
+    return new DocumentedElementReference(
+        nullableParent.withModule(module),
+        segment(),
+        type()
+    );
+  }
+
   public sealed interface PathElement {
 
   }
