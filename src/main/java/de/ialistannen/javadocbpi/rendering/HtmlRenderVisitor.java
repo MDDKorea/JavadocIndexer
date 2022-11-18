@@ -3,6 +3,8 @@ package de.ialistannen.javadocbpi.rendering;
 import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference;
 import de.ialistannen.javadocbpi.model.javadoc.OurJavadocReference;
 import de.ialistannen.javadocbpi.rendering.links.LinkResolver;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.jsoup.nodes.Entities;
@@ -100,6 +102,7 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
           DEPRECATED,
           EXCEPTION,
           PROVIDES,
+          RETURN,
           SEE,
           SERIAL,
           SERIAL_DATA,
@@ -138,7 +141,29 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   private String formatLink(Optional<String> label, DocumentedElementReference reference) {
     String url = linkResolver.resolve(reference, baseUrl);
-    return "<a href=\"" + url + "\">" + Entities.escape(label.orElse(url)) + "</a>";
+    return "<a href=\"" + url + "\">" +
+           Entities.escape(label.orElse(getImplicitReferenceLabel(reference)))
+           + "</a>";
+  }
+
+  private String getImplicitReferenceLabel(DocumentedElementReference reference) {
+    if (reference.isField() || reference.isMethod()) {
+      var parts = new ArrayList<>(reference.toParts());
+      Collections.reverse(parts);
+
+      String prefix = parts.stream()
+          .filter(it -> !it.isField() && !it.isMethod())
+          .findFirst()
+          .map(DocumentedElementReference::asQualifiedName)
+          .orElse("");
+      String label = reference.asQualifiedName().replace(prefix, "");
+
+      if (reference.isMethod()) {
+        return label + ")";
+      }
+      return label;
+    }
+    return reference.segment().toString();
   }
 
   private String visitList(List<JavadocElement> elements) {

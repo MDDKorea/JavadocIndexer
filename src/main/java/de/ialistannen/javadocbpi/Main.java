@@ -110,7 +110,6 @@ public class Main {
     for (DocumentedElement value : elements.getElements().values()) {
       System.out.println(new DeclarationRenderer().renderDeclaration(value));
     }
-    System.exit(0);
 
     System.out.println();
     PrefixTrie trie = PrefixTrie.forElements(elements);
@@ -150,7 +149,7 @@ public class Main {
     System.out.println(new QueryTokenizer().tokenize("java.base/java.lang.String#lines"));
 
     for (var entry : elements.getElements().entrySet()) {
-      if (entry.getKey().asQualifiedName().endsWith(".TestClass")) {
+      if (entry.getKey().asQualifiedName().contains(".TestClass")) {
         for (JavadocElement element : entry.getValue().javadoc()) {
           System.out.print(element.accept(
               new HtmlRenderVisitor(new Java11PlusLinkResolver(), "https://example.com")

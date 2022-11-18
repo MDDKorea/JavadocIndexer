@@ -29,7 +29,7 @@ public class TestClass {
    * <p>
    * And let's follow it up with a lot more.
    * <br>
-   * Or maybe not?
+   * Or maybe not? But let's reference it {@link #foo(long, String)}.
    *
    * @param a I am a parameter
    * @param foo Serendipitous! I am one as well!
