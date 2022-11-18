@@ -10,7 +10,8 @@ public record IndexerConfig(
     @JsonProperty("resource_paths") List<String> resourcePaths,
     @JsonProperty("allowed_packages") Set<String> allowedPackages,
     @JsonProperty("build_files") List<Path> buildFiles,
-    @JsonProperty("maven_home") Path mavenHome
+    @JsonProperty("maven_home") Path mavenHome,
+    @JsonProperty("output_timings") Boolean outputTimings
 ) {
 
 }

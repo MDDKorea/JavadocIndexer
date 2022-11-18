@@ -1,5 +1,5 @@
 output_path = "target/Jetbrains-Annotations.db"
-resource_paths = ["/home/i_al_istannen/.temp/Indizes/jetbrains-annotations"]
+resource_paths = ["indexes/jetbrains-annotations"]
 allowed_packages = [
     "*"
 ]

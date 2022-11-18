@@ -1,13 +1,13 @@
 output_path = "target/Junit-Index.db"
 resource_paths = [
-    "sample_projects/junit/junit5-main/junit-jupiter-api",
-    "sample_projects/junit/junit5-main/junit-jupiter-engine"
+    "indexes/junit5/junit-jupiter-api/src/main/java",
+    "indexes/junit5/junit-jupiter-engine/src/main/java",
+    "indexes/junit5/junit-platform-engine/src/main/java"
 ]
 allowed_packages = [
     "*"
 ]
 build_files = [
-    "sample_projects/junit/junit5-main/junit-jupiter-api/junit-jupiter-api.gradle.kts",
-    "sample_projects/junit/junit5-main/junit-jupiter-engine/junit-jupiter-engine.gradle.kts"
+    "indexes/junit5/pom.xml"
 ]
 maven_home = "/opt/maven"

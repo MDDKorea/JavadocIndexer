@@ -1,13 +1,13 @@
-output_path = "target/JavaFx-Index.db",
+output_path = "target/JavaFx-Index.db"
 resource_paths = [
-    "sample_projects/jfx/jfx-master/modules/javafx.base/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.controls/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.fxml/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.graphics/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.media/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.swing/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.swt/src/main/java",
-    "sample_projects/jfx/jfx-master/modules/javafx.web/src/main/java"
+    "indexes/jfx/modules/javafx.base/src/main/java",
+    "indexes/jfx/modules/javafx.controls/src/main/java",
+    "indexes/jfx/modules/javafx.fxml/src/main/java",
+    "indexes/jfx/modules/javafx.graphics/src/main/java",
+    "indexes/jfx/modules/javafx.media/src/main/java",
+    "indexes/jfx/modules/javafx.swing/src/main/java",
+    "indexes/jfx/modules/javafx.swt/src/main/java",
+    "indexes/jfx/modules/javafx.web/src/main/java"
 ]
 allowed_packages = [
     "javafx.animation",
@@ -48,5 +48,5 @@ allowed_packages = [
     "javafx.util",
     "javafx.util.converter"
 ]
-build_files = ["sample_projects/jfx/jfx-master/build.gradle"]
+build_files = ["indexes/jfx/build.gradle"]
 maven_home = "/opt/maven"
