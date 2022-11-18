@@ -8,7 +8,7 @@ import static de.ialistannen.javadocbpi.model.elements.DocumentedElementType.TYP
 
 import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference;
 import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference.ReferencePathElement;
-import java.util.regex.Matcher;
+import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference.StringPathElement;
 import java.util.regex.Pattern;
 import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtField;
@@ -16,6 +16,7 @@ import spoon.reflect.declaration.CtModule;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtType;
+import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtModuleReference;
@@ -33,11 +34,21 @@ public class ReferenceConversions {
     return switch (reference) {
       case CtModuleReference ref -> getReference(ref.getDeclaration());
       case CtPackageReference ref -> getReference(ref.getDeclaration());
+      case CtArrayTypeReference<?> ref -> getReference(ref);
       case CtTypeReference<?> ref -> getReference(ref.getTypeDeclaration());
       case CtExecutableReference<?> ref -> getReference(ref.getExecutableDeclaration());
       case CtFieldReference<?> ref -> getReference(ref.getFieldDeclaration());
       default -> throw new IllegalStateException("Unexpected value: " + reference);
     };
+  }
+
+  private static DocumentedElementReference getReference(CtArrayTypeReference<?> ref) {
+    DocumentedElementReference arrayRef = getReference(ref.getArrayType());
+    return new DocumentedElementReference(
+        arrayRef.nullableParent(),
+        new StringPathElement(arrayRef.segment().toString() + "[]".repeat(ref.getDimensionCount())),
+        arrayRef.type()
+    );
   }
 
   public static DocumentedElementReference getReference(CtModule module) {
@@ -75,7 +86,7 @@ public class ReferenceConversions {
 
     for (CtParameter<?> parameter : executable.getParameters()) {
       reference = reference.andThen(
-          new ReferencePathElement(getReference(parameter.getType().getTypeDeclaration())),
+          new ReferencePathElement(getReference(parameter.getType())),
           TYPE
       );
     }

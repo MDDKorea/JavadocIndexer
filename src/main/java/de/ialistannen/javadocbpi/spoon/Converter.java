@@ -89,7 +89,7 @@ public class Converter extends CtAbstractVisitor {
         new DocumentedField(
             getReference(f.getDeclaringType()),
             f.getSimpleName(),
-            getReference(f.getType().getTypeDeclaration()),
+            getReference(f.getType()),
             renderTypeReference(f.getType()),
             getJavadocComment(f),
             f.getModifiers()
@@ -107,7 +107,7 @@ public class Converter extends CtAbstractVisitor {
     List<DocumentedParameter> parameters = m.getParameters()
         .stream()
         .map(it -> new DocumentedParameter(
-            getReference(it.getType().getTypeDeclaration()),
+            getReference(it.getType()),
             renderTypeReference(it.getType()),
             it.getSimpleName()
         ))
@@ -126,7 +126,7 @@ public class Converter extends CtAbstractVisitor {
             getReference(m.getDeclaringType()),
             m.getSimpleName(),
             typeParameters,
-            getReference(m.getType().getTypeDeclaration()),
+            getReference(m.getType()),
             renderTypeReference(m.getType()),
             parameters,
             thrownTypes,
