@@ -42,6 +42,9 @@ public class PomParser {
   private List<Dependency> mapDependencies(Model model,
       List<org.apache.maven.model.Dependency> dependencies) {
     return dependencies.stream()
+        .filter(
+            it -> it.getGroupId() != null && it.getArtifactId() != null && it.getVersion() != null
+        )
         .map(it -> new Dependency(
             resolveWithProperty(model, it.getGroupId()),
             resolveWithProperty(model, it.getArtifactId()),
