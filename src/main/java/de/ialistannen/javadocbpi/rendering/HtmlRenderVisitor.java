@@ -141,9 +141,9 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   private String formatLink(Optional<String> label, DocumentedElementReference reference) {
     String url = linkResolver.resolve(reference, baseUrl);
-    return "<a href=\"" + url + "\">" +
+    return "<a href=\"" + url + "\"><code>" +
            Entities.escape(label.orElse(getImplicitReferenceLabel(reference)))
-           + "</a>";
+           + "</code></a>";
   }
 
   private String getImplicitReferenceLabel(DocumentedElementReference reference) {
