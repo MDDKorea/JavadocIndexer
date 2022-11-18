@@ -17,25 +17,10 @@ public class MarkdownRenderer {
     this.linkResolver = linkResolver;
   }
 
-  public String render(JavadocElement element, String baseUrl) {
-    HtmlRenderVisitor htmlRenderVisitor = new HtmlRenderVisitor(linkResolver, baseUrl);
-
-    String html = element.accept(htmlRenderVisitor);
-    String markdown = render(processHtml(html));
-
-    if (html.startsWith(" ")) {
-      markdown = " " + markdown;
-    }
-    if (html.endsWith(" ")) {
-      markdown += " ";
-    }
-    return markdown;
-  }
-
   public static String render(String html) {
     return FlexmarkHtmlConverter.builder()
         .build()
-        .convert(html, -1);
+        .convert(processHtml(html), -1);
   }
 
   private static String processHtml(String html) {
