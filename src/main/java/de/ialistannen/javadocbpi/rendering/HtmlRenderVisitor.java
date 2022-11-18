@@ -58,7 +58,7 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
           yield "<code>" + text + "</code>";
         }
       }
-      case DOC_ROOT -> "{@docRoot}";
+      case DOC_ROOT -> baseUrl;
       case INDEX -> arguments.get(0).accept(this); // skip explanation
       case INHERIT_DOC -> throw new RuntimeException("TODO");
       case LINK, LINKPLAIN -> {
