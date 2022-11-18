@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 public class GradleParser {
 
   private static final Pattern DEPENDENCY_DECLARATION = Pattern.compile(
-      "(api|implementation|compileOnly|runtimeOnly)(\\(platform)?([ (])([\"'])(.+)([\"'])"
+      "(api|implementation|compileOnly|runtimeOnly|apiAndDocs)(\\(platform)?([ (])([\"'])(.+)([\"'])"
   );
   private static final Pattern DEPENDENCY_PARTS = Pattern.compile(
-      "([\\w.-]+):([\\w.-]+):?([\\w.$-]+)?(@pom)?"
+      "([\\w.-]+):([\\w.-]+):?([\\w.+$-]+)?(@pom)?"
   );
   private static final Pattern REPOSITORY_DECLARATION = Pattern.compile(
       "maven\\([\"'](.+)[\"']\\)"
