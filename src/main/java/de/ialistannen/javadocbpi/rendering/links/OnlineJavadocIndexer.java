@@ -9,12 +9,17 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OnlineJavadocIndexer {
+
+  private static final Pattern HTML_TAG_PATTERN = Pattern.compile("<(.+)>(.+)</\\1>");
 
   private final HttpClient client;
 
@@ -32,6 +37,40 @@ public class OnlineJavadocIndexer {
    * @throws InterruptedException if the send operation is interrupted
    */
   public ExternalJavadocReference fetchPackages(String baseUrl)
+      throws IOException, InterruptedException {
+    String targetUrl = baseUrl + (baseUrl.endsWith("/") ? "" : "/") + "element-list";
+
+    HttpResponse<String> response = client.send(
+        HttpRequest.newBuilder(URI.create(targetUrl)).timeout(Duration.ofSeconds(15)).build(),
+        BodyHandlers.ofString(StandardCharsets.UTF_8)
+    );
+
+    if (response.statusCode() != 200) {
+      return fetchPackagesPreModules(baseUrl);
+    }
+
+    return new ExternalJavadocReference(
+        baseUrl,
+        parseElementList(response.body().lines().toList())
+    );
+  }
+
+  private Map<String, String> parseElementList(List<String> lines) {
+    Map<String, String> packageToModuleMap = new HashMap<>();
+
+    String currentModule = "unnamed module";
+    for (String line : lines) {
+      if (line.startsWith("module:")) {
+        currentModule = line.substring("module:".length());
+        continue;
+      }
+      packageToModuleMap.put(line, currentModule);
+    }
+
+    return packageToModuleMap;
+  }
+
+  private ExternalJavadocReference fetchPackagesPreModules(String baseUrl)
       throws IOException, InterruptedException {
     String targetUrl = baseUrl + (baseUrl.endsWith("/") ? "" : "/") + "package-list";
 
@@ -68,7 +107,11 @@ public class OnlineJavadocIndexer {
 
     Set<String> packages = new HashSet<>();
     while (matcher.find()) {
-      packages.add(matcher.group(1));
+      String packageName = matcher.group(1);
+      while (HTML_TAG_PATTERN.asPredicate().test(packageName)) {
+        packageName = HTML_TAG_PATTERN.matcher(packageName).replaceAll("$2");
+      }
+      packages.add(packageName);
     }
     packages.remove("Package"); // header-link in the top left
 

@@ -48,18 +48,22 @@ public record DocumentedElementReference(
     return type() == FIELD;
   }
 
-  public Optional<DocumentedElementReference> getModule() {
+  public Optional<String> getModule() {
     if (type() == MODULE) {
-      return Optional.of(this);
+      return Optional.of(asQualifiedName());
     }
     return parent().flatMap(DocumentedElementReference::getModule);
   }
 
-  public Optional<DocumentedElementReference> getPackage() {
+  public Optional<String> getPackage() {
     if (type() == PACKAGE) {
-      return Optional.of(this);
+      String name = asQualifiedName();
+      if (getModule().isPresent()) {
+        name = name.replace(getModule().get() + "/", "");
+      }
+      return Optional.of(name);
     }
-    return parent().flatMap(DocumentedElementReference::getModule);
+    return parent().flatMap(DocumentedElementReference::getPackage);
   }
 
   public Optional<DocumentedElementReference> getType() {
