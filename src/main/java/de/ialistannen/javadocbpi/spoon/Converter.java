@@ -18,6 +18,7 @@ import de.ialistannen.javadocbpi.model.javadoc.ReferenceConversions;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import spoon.javadoc.api.elements.JavadocElement;
 import spoon.javadoc.api.parsing.JavadocParser;
@@ -48,10 +49,12 @@ public class Converter extends CtAbstractVisitor {
 
   private final LongAdder size;
   private final DocumentedElements elements;
+  private final AtomicBoolean hasModules;
 
   public Converter() {
     this.elements = new DocumentedElements();
     this.size = new LongAdder();
+    this.hasModules = new AtomicBoolean(false);
   }
 
   public DocumentedElements getElements() {
@@ -143,6 +146,9 @@ public class Converter extends CtAbstractVisitor {
 
   @Override
   public void visitCtModule(CtModule module) {
+    if (!module.isUnnamedModule()) {
+      hasModules.set(true);
+    }
     addElement(
         getReference(module),
         new DocumentedModule(module.getSimpleName(), getJavadocComment(module))
@@ -151,6 +157,10 @@ public class Converter extends CtAbstractVisitor {
 
   @Override
   public void visitCtPackage(CtPackage ctPackage) {
+    // Try to ignore fake (?) spoon packages in the unnamed module
+    if (hasModules.get() && ctPackage.getDeclaringModule().isUnnamedModule()) {
+      return;
+    }
     addElement(
         getReference(ctPackage),
         new DocumentedPackage(
