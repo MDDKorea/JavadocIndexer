@@ -15,6 +15,8 @@ package analysable.pack;
  *   }
  * }
  *
+ * Construct me using {@link TestClass#TestClass()}
+ *
  * @author i_al_istannen
  */
 public class TestClass {
@@ -23,6 +25,12 @@ public class TestClass {
    * And as always, I hope you {@index learned Cognitive process} something!
    */
   public static final String WELL = "HELLO";
+
+  /**
+   * Ayy, I am a constructor!
+   */
+  public TestClass() {
+  }
 
   /**
    * A short description of this method.

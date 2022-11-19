@@ -158,6 +158,11 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
           .orElse("");
       String label = reference.asQualifiedName().replace(prefix, "");
 
+      Optional<String> declaringType = reference.getType().map(it -> it.segment().toString());
+      if (declaringType.isPresent() && label.contains("<init>")) {
+        label = label.replace("<init>", declaringType.get());
+      }
+
       if (reference.isMethod()) {
         return label + ")";
       }
