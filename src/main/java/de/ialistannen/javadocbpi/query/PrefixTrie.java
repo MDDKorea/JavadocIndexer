@@ -154,6 +154,9 @@ public class PrefixTrie {
         CaseSensitivity caseSensitivity,
         List<Token> tokens
     ) {
+      if (tokens.isEmpty()) {
+        return List.of();
+      }
       Token myToken = tokens.get(0);
       List<Token> childTokens = tokens.subList(1, tokens.size());
 
