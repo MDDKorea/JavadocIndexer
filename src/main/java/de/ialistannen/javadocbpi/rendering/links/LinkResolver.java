@@ -1,6 +1,7 @@
 package de.ialistannen.javadocbpi.rendering.links;
 
 import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference;
+import de.ialistannen.javadocbpi.model.elements.DocumentedElementType;
 import java.util.regex.Pattern;
 
 public interface LinkResolver {
@@ -33,6 +34,12 @@ public interface LinkResolver {
     urlPart = urlPart.replace("#", ".html#");
     if (!urlPart.contains("#")) {
       urlPart += ".html";
+    }
+
+    if (name.type() == DocumentedElementType.PACKAGE) {
+      urlPart = urlPart.replace(".html", "/package-summary.html");
+    } else if (name.type() == DocumentedElementType.MODULE) {
+      urlPart = urlPart.replace(".html", "/module-summary.html");
     }
 
     return urlPart;

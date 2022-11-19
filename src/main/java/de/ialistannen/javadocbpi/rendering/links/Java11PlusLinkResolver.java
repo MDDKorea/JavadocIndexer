@@ -1,6 +1,7 @@
 package de.ialistannen.javadocbpi.rendering.links;
 
 import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference;
+import de.ialistannen.javadocbpi.model.elements.DocumentedElementType;
 
 public class Java11PlusLinkResolver implements LinkResolver {
 
@@ -17,6 +18,9 @@ public class Java11PlusLinkResolver implements LinkResolver {
     String module = reference.getModule().orElse("");
 
     if (!module.isEmpty()) {
+      if (reference.type() == DocumentedElementType.MODULE) {
+        urlPart = "module-summary.html";
+      }
       urlPart = module + "/" + urlPart;
     }
 
