@@ -98,7 +98,11 @@ public class ReferenceConversions {
   }
 
   public static String renderTypeReference(CtTypeReference<?> reference) {
-    return QUALIFIED.matcher(reference.toString()).replaceAll("$2");
+    return unqualifyReference(reference.toString());
+  }
+
+  public static String unqualifyReference(String fqn) {
+    return QUALIFIED.matcher(fqn).replaceAll("$2");
   }
 
 }
