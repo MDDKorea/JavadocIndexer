@@ -1,21 +1,13 @@
 package de.ialistannen.javadocbpi.rendering;
 
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
-import de.ialistannen.javadocbpi.rendering.links.LinkResolver;
 import java.util.Objects;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
-import spoon.javadoc.api.elements.JavadocElement;
 
 public class MarkdownRenderer {
-
-  private final LinkResolver linkResolver;
-
-  public MarkdownRenderer(LinkResolver linkResolver) {
-    this.linkResolver = linkResolver;
-  }
 
   public static String render(String html) {
     return FlexmarkHtmlConverter.builder()
@@ -44,11 +36,17 @@ public class MarkdownRenderer {
         // and then
         //   <pre>
         //     <code>
+
+        // Convert us to a code element, append a clone of us to a fresh pre element and then
+        // replace us by the newly created pre element. This ensures we keep our position in the
+        // parent.
         pre.tagName("code");
         pre.attr("class", "language-java");
 
         Element newPre = Objects.requireNonNull(pre.parent()).appendElement("pre");
-        newPre.appendChild(pre);
+        newPre.appendChild(pre.clone());
+
+        pre.replaceWith(newPre);
       }
     }
 
