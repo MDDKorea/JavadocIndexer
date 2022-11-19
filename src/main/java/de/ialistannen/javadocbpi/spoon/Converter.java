@@ -26,9 +26,12 @@ import spoon.reflect.code.CtJavaDoc;
 import spoon.reflect.declaration.CtAnnotationMethod;
 import spoon.reflect.declaration.CtAnnotationType;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtConstructor;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtEnum;
+import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtField;
+import spoon.reflect.declaration.CtFormalTypeDeclarer;
 import spoon.reflect.declaration.CtInterface;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtModule;
@@ -106,7 +109,19 @@ public class Converter extends CtAbstractVisitor {
   }
 
   @Override
+  public <T> void visitCtConstructor(CtConstructor<T> c) {
+    handleExecutable(c, c);
+  }
+
+  @Override
   public <T> void visitCtMethod(CtMethod<T> m) {
+    handleExecutable(m, m);
+  }
+
+  private <T, E extends CtExecutable<T>, D extends CtFormalTypeDeclarer> void handleExecutable(
+      E m,
+      D d
+  ) {
     List<DocumentedParameter> parameters = m.getParameters()
         .stream()
         .map(it -> new DocumentedParameter(
@@ -119,14 +134,14 @@ public class Converter extends CtAbstractVisitor {
         .stream()
         .map(ReferenceConversions::getReference)
         .toList();
-    List<String> typeParameters = m.getFormalCtTypeParameters()
+    List<String> typeParameters = d.getFormalCtTypeParameters()
         .stream()
         .map(it -> renderTypeReference(it.getReference()))
         .toList();
     addElement(
         getReference(m),
         new DocumentedMethod(
-            getReference(m.getDeclaringType()),
+            getReference(d.getDeclaringType()),
             m.getSimpleName(),
             typeParameters,
             getReference(m.getType()),
@@ -134,7 +149,7 @@ public class Converter extends CtAbstractVisitor {
             parameters,
             thrownTypes,
             getJavadocComment(m),
-            m.getModifiers()
+            d.getModifiers()
         )
     );
   }

@@ -144,6 +144,10 @@ public class Main {
     ));
     System.out.println(trie.find(
         MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
+        new QueryTokenizer().tokenize("TestClass#TestClass")
+    ));
+    System.out.println(trie.find(
+        MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
         new QueryTokenizer().tokenize("dsTestClass")
     ));
     System.out.println(new QueryTokenizer().tokenize("java.base/java.lang.String#lines"));

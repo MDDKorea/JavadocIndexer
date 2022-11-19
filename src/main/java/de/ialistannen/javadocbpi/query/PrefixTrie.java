@@ -74,17 +74,24 @@ public class PrefixTrie {
       String firstSegment = next.get().segment().toString();
 
       for (InnerTrieNode innerNode : mutableChildren) {
-        if (innerNode.segmentName.equals(firstSegment)) {
-          if (reference.crossedFieldOrMethodPart()) {
-            innerNode.qualifiedNames().add(reference.qualifiedName());
+        for (String segmentName : innerNode.segmentNames) {
+          if (segmentName.equals(firstSegment)) {
+            if (reference.crossedFieldOrMethodPart()) {
+              innerNode.qualifiedNames().add(reference.qualifiedName());
+            }
+            innerNode.insert(reference);
+            return;
           }
-          innerNode.insert(reference);
-          return;
         }
       }
 
+      List<String> segments = List.of(firstSegment);
+      if (firstSegment.equals("<init>") && reference.reference.getType().isPresent()) {
+        segments = List.of(firstSegment, reference.reference.getType().get().segment().toString());
+      }
+
       InnerTrieNode newNode = new InnerTrieNode(
-          firstSegment,
+          segments,
           new ArrayList<>(List.of(reference.qualifiedName())),
           new ArrayList<>(),
           next.get().type()
@@ -135,7 +142,7 @@ public class PrefixTrie {
   }
 
   private record InnerTrieNode(
-      String segmentName,
+      List<String> segmentNames,
       List<String> qualifiedNames,
       Collection<InnerTrieNode> children,
       DocumentedElementType type
@@ -180,8 +187,10 @@ public class PrefixTrie {
       if (!myToken.hasType() && type() == METHOD) {
         return VisitResult.ABORT;
       }
-      if (myToken.matches(matchingStrategy, caseSensitivity, segmentName)) {
-        return VisitResult.HANDLE;
+      for (String segmentName : segmentNames) {
+        if (myToken.matches(matchingStrategy, caseSensitivity, segmentName)) {
+          return VisitResult.HANDLE;
+        }
       }
       if (!myToken.hasType()) {
         return VisitResult.DEFER_TO_CHILDREN;
