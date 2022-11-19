@@ -13,12 +13,14 @@ import java.util.regex.Pattern;
 
 public class QueryTokenizer {
 
-  public static final Pattern SEPARATOR = Pattern.compile("([/.#$(,]?)([^/.#$(,]+)");
+  public static final Pattern SEPARATOR = Pattern.compile(
+      "[(,](?<module>[^/]+)/|(?<separator>[/.#$(,]?)(?<token>[^/.#$(,]+)"
+  );
 
   public List<Token> tokenize(String query) {
     List<Token> tokens = new ArrayList<>();
     // Our qualified method names do not end with a )
-    String normalizedQuery = query.replace(")", "");
+    String normalizedQuery = query.replace(")", "").replaceAll("\\s+", "");
 
     if (normalizedQuery.indexOf('/') > 0) {
       int moduleEnd = normalizedQuery.indexOf('/');
@@ -28,12 +30,16 @@ public class QueryTokenizer {
     Matcher matcher = SEPARATOR.matcher(normalizedQuery);
 
     while (matcher.find()) {
-      String foundSeparator = matcher.group(1);
-      String tokenText = matcher.group(2);
-      if (foundSeparator.equals("#")) {
-        tokens.add(new Token(tokenText, Set.of(METHOD, FIELD)));
+      if (matcher.group("module") != null) {
+        tokens.add(new Token(matcher.group("module"), Set.of(MODULE)));
       } else {
-        tokens.add(new Token(tokenText, Set.of()));
+        String foundSeparator = matcher.group("separator");
+        String tokenText = matcher.group("token");
+        if (foundSeparator.equals("#")) {
+          tokens.add(new Token(tokenText, Set.of(METHOD, FIELD)));
+        } else {
+          tokens.add(new Token(tokenText, Set.of()));
+        }
       }
     }
 
