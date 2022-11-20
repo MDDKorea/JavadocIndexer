@@ -15,8 +15,10 @@ package analysable.pack;
  *   }
  * }
  *
- * Construct me using {@link TestClass#TestClass()}
+ * Construct me using {@link TestClass#TestClass()}.
+ * {@link java.nio.file.StandardOpenOption#CREATE CREATE}.
  *
+ * @see SecondClass
  * @author i_al_istannen
  */
 public class TestClass {
