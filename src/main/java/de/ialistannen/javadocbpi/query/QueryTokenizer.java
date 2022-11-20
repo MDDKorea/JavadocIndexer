@@ -43,6 +43,10 @@ public class QueryTokenizer {
       }
     }
 
+    if (normalizedQuery.endsWith("#")) {
+      tokens.add(new Token("", Set.of(METHOD, FIELD)));
+    }
+
     return tokens;
   }
 

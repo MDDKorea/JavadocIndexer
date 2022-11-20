@@ -154,6 +154,11 @@ public class Main {
         MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
         new QueryTokenizer().tokenize("dsTestClass")
     ));
+    System.out.println(trie.autocomplete(
+        MatchingStrategy.PREFIX, CaseSensitivity.CONSIDER_CASE,
+        new QueryTokenizer().tokenize("TestClass#"),
+        10
+    ));
     System.out.println(new QueryTokenizer().tokenize("java.base/java.lang.String#lines"));
 
     for (var entry : elements.getElements().entrySet()) {
