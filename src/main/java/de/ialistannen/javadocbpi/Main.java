@@ -147,6 +147,10 @@ public class Main {
         new QueryTokenizer().tokenize("TestClass#TestClass")
     ));
     System.out.println(trie.find(
+        MatchingStrategy.PREFIX, CaseSensitivity.CONSIDER_CASE,
+        new QueryTokenizer().tokenize("TestEnum#AYY")
+    ));
+    System.out.println(trie.find(
         MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
         new QueryTokenizer().tokenize("dsTestClass")
     ));

@@ -29,6 +29,7 @@ import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtConstructor;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtEnum;
+import spoon.reflect.declaration.CtEnumValue;
 import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtFormalTypeDeclarer;
@@ -86,6 +87,11 @@ public class Converter extends CtAbstractVisitor {
   @Override
   public <T extends Enum<?>> void visitCtEnum(CtEnum<T> ctEnum) {
     visitType(ctEnum, Type.ENUM);
+  }
+
+  @Override
+  public <T> void visitCtEnumValue(CtEnumValue<T> enumValue) {
+    visitCtField(enumValue);
   }
 
   @Override
