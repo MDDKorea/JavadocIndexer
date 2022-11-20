@@ -75,6 +75,13 @@ public class MarkdownRenderer {
       }
     }
 
+    // Delete empty anchor tags
+    for (Element a : document.getElementsByTag("a")) {
+      if (a.childNodeSize() == 0 && a.hasAttr("id")) {
+        a.remove();
+      }
+    }
+
     return document.getElementsByTag("body").get(0).html();
   }
 
