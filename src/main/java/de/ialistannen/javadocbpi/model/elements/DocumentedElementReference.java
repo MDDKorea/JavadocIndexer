@@ -89,6 +89,7 @@ public record DocumentedElementReference(
     if (isMethodParameter()) {
       return nullableParent.asQualifiedName() + "," + segment.toString();
     }
+
     String result;
     if (nullableParent != null) {
       String separator;
@@ -105,17 +106,19 @@ public record DocumentedElementReference(
     } else {
       result = segment.toString();
     }
+
+    // Methods need a "(" even if they do not have any children (i.e. parameters), so do it here
     if (type() == METHOD) {
       result += "(";
     }
     return result;
   }
 
-  private boolean isFirstMethodParameter() {
+  public boolean isFirstMethodParameter() {
     return parent().isPresent() && parent().get().type() == METHOD;
   }
 
-  private boolean isMethodParameter() {
+  public boolean isMethodParameter() {
     return anyParentMatches(it -> it.type() == METHOD);
   }
 

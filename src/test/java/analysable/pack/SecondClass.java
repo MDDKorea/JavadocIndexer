@@ -17,4 +17,12 @@ public abstract class SecondClass<T extends Comparable<T>>
     return List.of();
   }
 
+  /**
+   * Some docs!
+   */
+  public static class Inner {
+
+    public void varargs(String... varargs) {
+    }
+  }
 }

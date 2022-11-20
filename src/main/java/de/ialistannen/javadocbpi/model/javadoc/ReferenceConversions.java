@@ -44,9 +44,19 @@ public class ReferenceConversions {
 
   private static DocumentedElementReference getReference(CtArrayTypeReference<?> ref) {
     DocumentedElementReference arrayRef = getReference(ref.getArrayType());
+    String arrayAppendix;
+    if (ref.isParentInitialized()
+        && ref.getParent() instanceof CtParameter<?> param
+        && param.isVarArgs()) {
+      arrayAppendix = "[]".repeat(ref.getDimensionCount() - 1);
+      arrayAppendix += "...";
+    } else {
+      arrayAppendix = "[]".repeat(ref.getDimensionCount());
+    }
+
     return new DocumentedElementReference(
         arrayRef.nullableParent(),
-        new StringPathElement(arrayRef.segment().toString() + "[]".repeat(ref.getDimensionCount())),
+        new StringPathElement(arrayRef.segment().toString() + arrayAppendix),
         arrayRef.type()
     );
   }
@@ -98,7 +108,16 @@ public class ReferenceConversions {
   }
 
   public static String renderTypeReference(CtTypeReference<?> reference) {
-    return unqualifyReference(reference.toString());
+    String ref = unqualifyReference(reference.toString());
+    if (reference.isParentInitialized()
+        && reference.getParent() instanceof CtParameter<?> param
+        && param.isVarArgs()) {
+      // cut off last dimension
+      ref = ref.substring(0, ref.length() - 2);
+      // add varargs marker
+      ref += "...";
+    }
+    return ref;
   }
 
   public static String unqualifyReference(String fqn) {
