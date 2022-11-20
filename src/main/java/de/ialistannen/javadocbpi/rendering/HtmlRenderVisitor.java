@@ -134,7 +134,7 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
   public String visitReference(JavadocReference reference) {
     return formatLink(
         Optional.empty(),
-        ((OurJavadocReference) reference.getReference()).getDocumentedReference()
+        ((OurJavadocReference) reference).getDocumentedReference()
     );
   }
 
