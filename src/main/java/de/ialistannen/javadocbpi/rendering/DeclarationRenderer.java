@@ -86,7 +86,11 @@ public class DeclarationRenderer {
       result += " <" + String.join(", ", method.renderedTypeParameters()) + ">";
     }
     result += " " + method.renderedReturnType();
-    result += " " + method.name();
+    if (method.name().equals("<init>")) {
+      result += " " + method.enclosingTypeRef().segment().toString();
+    } else {
+      result += " " + method.name();
+    }
     result += method.parameters().stream()
         .map(it -> it.renderedType() + " " + it.name())
         .collect(Collectors.joining(", ", "(", ")"));
