@@ -85,10 +85,12 @@ public class DeclarationRenderer {
     if (!method.renderedTypeParameters().isEmpty()) {
       result += " <" + String.join(", ", method.renderedTypeParameters()) + ">";
     }
-    result += " " + method.renderedReturnType();
+
+    // special case constructors
     if (method.name().equals("<init>")) {
       result += " " + method.enclosingTypeRef().segment().toString();
     } else {
+      result += " " + method.renderedReturnType();
       result += " " + method.name();
     }
     result += method.parameters().stream()
