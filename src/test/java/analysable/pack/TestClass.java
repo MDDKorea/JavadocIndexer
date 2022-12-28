@@ -59,4 +59,9 @@ public class TestClass {
   public static long foo(long a, String foo) {
     return 42;
   }
+
+  public static void first(int a, String b) {
+  }
+  public static void first(int a, String... b) {
+  }
 }

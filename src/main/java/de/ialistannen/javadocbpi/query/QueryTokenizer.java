@@ -43,6 +43,11 @@ public class QueryTokenizer {
       }
     }
 
+    if (normalizedQuery.endsWith("...")) {
+      Token token = tokens.get(tokens.size() - 1);
+      tokens.set(tokens.size() - 1, new Token(token.str() + "...", token.potentialTypes()));
+    }
+
     if (normalizedQuery.endsWith("#")) {
       tokens.add(new Token("", Set.of(METHOD, FIELD)));
     }

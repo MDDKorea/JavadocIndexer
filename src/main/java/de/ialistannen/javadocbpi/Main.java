@@ -115,6 +115,10 @@ public class Main {
     PrefixTrie trie = PrefixTrie.forElements(elements);
     System.out.println(trie.find(
         MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
+        new QueryTokenizer().tokenize("TestClass#first(int, String...)")
+    ));
+    System.out.println(trie.find(
+        MatchingStrategy.EXACT, CaseSensitivity.CONSIDER_CASE,
         new QueryTokenizer().tokenize("analysable.pack.TestClass")
     ));
     System.out.println(trie.find(
