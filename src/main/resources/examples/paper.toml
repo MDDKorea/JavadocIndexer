@@ -4,10 +4,6 @@ allowed_packages = [
     "*"
 ]
 build_files = [
-    "indexes/paper/test-plugin/build.gradle.kts",
-    "indexes/paper/Paper-MojangAPI/build.gradle.kts",
-    "indexes/paper/Paper-API/build.gradle.kts",
-    "indexes/paper/build.gradle.kts",
-    "indexes/paper/settings.gradle.kts"
+    "indexes/paper",
 ]
 maven_home = "/opt/maven"

@@ -1,13 +1,10 @@
 package de.ialistannen.javadocbpi;
 
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;
-import de.ialistannen.javadocbpi.classpath.GradleParser;
+import de.ialistannen.javadocbpi.classpath.GradleClasspathParser;
 import de.ialistannen.javadocbpi.classpath.Pom;
 import de.ialistannen.javadocbpi.classpath.PomClasspathDiscoverer;
 import de.ialistannen.javadocbpi.classpath.PomParser;
-import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference;
-import de.ialistannen.javadocbpi.model.elements.DocumentedElementReference.StringPathElement;
-import de.ialistannen.javadocbpi.model.elements.DocumentedElementType;
 import de.ialistannen.javadocbpi.model.elements.DocumentedElements;
 import de.ialistannen.javadocbpi.spoon.Converter;
 import de.ialistannen.javadocbpi.spoon.IndexerFilterChain;
@@ -23,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.maven.shared.invoker.MavenInvocationException;
@@ -71,7 +69,7 @@ public class Indexer {
       timings.measure(
           "build-classpath",
           () -> configureInputClassLoader(
-              config.buildFiles(), config.mavenHome(), launcher
+              config.buildFiles(), config.mavenHome(), config.javaHome(), launcher
           )
       );
     }
@@ -111,6 +109,9 @@ public class Indexer {
       );
       storage.writeDatabase(elements);
     }
+
+    // Gradle connector spawns non-daemon threads, nicely ask them to stop
+    System.exit(0);
   }
 
   private static String heading(String text) {
@@ -122,32 +123,38 @@ public class Indexer {
            + " \033[94;1m====\033[0m";
   }
 
-  private static void configureInputClassLoader(List<Path> buildFiles, Path mavenHome,
-      Launcher launcher)
-      throws IOException {
+  public static void configureInputClassLoader(
+      List<Path> buildFiles, Path mavenHome, Path javaHome, Launcher launcher
+  ) throws IOException {
     try {
       Pom pom = new Pom(Set.of(), Set.of(), Set.of());
-      GradleParser gradleParser = new GradleParser();
+      Set<Path> classpath = new HashSet<>();
+      GradleClasspathParser classpathParser = new GradleClasspathParser();
       PomParser pomParser = new PomParser();
       for (Path buildFile : buildFiles) {
-        if (buildFile.getFileName().toString().contains("gradle")) {
-          System.out.println(heading("Parsing build.gradle", 2));
-          pom = pom.merge(gradleParser.parseGradleFile(Files.readString(buildFile)));
-          System.out.println("  Successfully parsed build.gradle file");
-        } else {
+        if (buildFile.getFileName().toString().endsWith(".xml")) {
           System.out.println(heading("Parsing POM", 2));
           pom = pom.merge(pomParser.parsePom(Files.readString(buildFile)));
           System.out.println("  Successfully parsed POM");
+        } else {
+          System.out.println(heading("Parsing build.gradle", 2));
+          for (Path path : classpathParser.getClasspath(javaHome, buildFile)) {
+            if (Files.notExists(path) || !Files.isRegularFile(path)) {
+              continue;
+            }
+            classpath.add(path);
+          }
+          System.out.println("  Successfully parsed build.gradle file");
         }
       }
 
-      System.out.println(heading("Building classpath from POM", 2));
-
-      Path outputPomFile = Files.createTempFile("Generatedpom", ".xml");
-      outputPomFile.toFile().deleteOnExit();
-      Files.writeString(outputPomFile, pom.format());
-
-      List<Path> classpath = new PomClasspathDiscoverer().findClasspath(outputPomFile, mavenHome);
+      if (!pom.getDependencies().isEmpty()) {
+        System.out.println(heading("Building classpath from POM", 2));
+        Path outputPomFile = Files.createTempFile("Generatedpom", ".xml");
+        outputPomFile.toFile().deleteOnExit();
+        Files.writeString(outputPomFile, pom.format());
+        classpath.addAll(new PomClasspathDiscoverer().findClasspath(outputPomFile, mavenHome));
+      }
 
       List<URL> urls = new ArrayList<>();
       for (Path path : classpath) {
@@ -162,7 +169,7 @@ public class Indexer {
     }
   }
 
-  private static class ConsoleProcessLogger extends ProgressLogger {
+  public static class ConsoleProcessLogger extends ProgressLogger {
 
     public int touchedClasses;
 

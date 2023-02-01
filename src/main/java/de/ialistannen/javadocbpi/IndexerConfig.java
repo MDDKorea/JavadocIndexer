@@ -11,6 +11,7 @@ public record IndexerConfig(
     @JsonProperty("allowed_packages") Set<String> allowedPackages,
     @JsonProperty("build_files") List<Path> buildFiles,
     @JsonProperty("maven_home") Path mavenHome,
+    @JsonProperty("java_home") Path javaHome,
     @JsonProperty("output_timings") Boolean outputTimings
 ) {
 
