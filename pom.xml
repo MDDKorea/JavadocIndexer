@@ -83,9 +83,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>fr.inria.gforge.spoon</groupId>
-      <artifactId>spoon-javadoc</artifactId>
-      <version>10.3.0-SNAPSHOT</version>
+      <groupId>com.github.I-Al-Istannen</groupId>
+      <artifactId>spoon</artifactId>
+      <version>270e9127652cbbb96fb55f8b233cad06354493b2</version>
     </dependency>
     <dependency>
       <groupId>com.squareup.moshi</groupId>
@@ -133,5 +133,11 @@
       <id>gradle</id>
       <url>https://repo.gradle.org/gradle/libs-releases</url>
     </repository>
+
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
+
 </project>
