@@ -1,0 +1,14 @@
+output_path = "target/Adventure-Api-Index.db"
+resource_paths = [
+    "indexes/adventure/api/src/main/java",
+    "indexes/adventure/key/src/main/java",
+    "indexes/adventure/nbt/src/main/java",
+    "indexes/adventure/text-minimessage/src/main/java",
+]
+allowed_packages = [
+    "*"
+]
+build_files = [
+    "indexes/adventure",
+]
+maven_home = "/opt/maven"
