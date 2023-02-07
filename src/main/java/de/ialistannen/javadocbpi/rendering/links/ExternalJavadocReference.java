@@ -19,7 +19,8 @@ public record ExternalJavadocReference(
   }
 
   public Optional<String> getModule(String packageName) {
-    return Optional.ofNullable(packageToModuleMap.get(packageName));
+    return Optional.ofNullable(packageToModuleMap.get(packageName))
+        .filter(it -> !it.equals("unnamed module"));
   }
 
   public ExternalJavadocReference {
