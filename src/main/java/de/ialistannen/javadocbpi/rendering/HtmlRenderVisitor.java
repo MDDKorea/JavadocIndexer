@@ -60,7 +60,7 @@ public class HtmlRenderVisitor implements JavadocVisitor<String> {
       }
       case DOC_ROOT -> baseUrl;
       case INDEX -> arguments.get(0).accept(this); // skip explanation
-      case INHERIT_DOC -> throw new RuntimeException("TODO");
+      case INHERIT_DOC -> "{@inheritDoc (unresolvable)}";
       case LINK, LINKPLAIN -> {
         if (arguments.get(0) instanceof OurJavadocReference ourJavadocReference) {
           DocumentedElementReference reference = ourJavadocReference.getDocumentedReference();

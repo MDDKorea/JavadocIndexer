@@ -16,13 +16,13 @@ import de.ialistannen.javadocbpi.model.elements.DocumentedType.Type;
 import de.ialistannen.javadocbpi.model.javadoc.ReferenceConversionVisitor;
 import de.ialistannen.javadocbpi.model.javadoc.ReferenceConversions;
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
+import spoon.javadoc.api.elements.JavadocCommentView;
 import spoon.javadoc.api.elements.JavadocElement;
+import spoon.javadoc.api.parsing.InheritanceResolver;
 import spoon.javadoc.api.parsing.JavadocParser;
-import spoon.reflect.code.CtJavaDoc;
 import spoon.reflect.declaration.CtAnnotationMethod;
 import spoon.reflect.declaration.CtAnnotationType;
 import spoon.reflect.declaration.CtClass;
@@ -229,16 +229,11 @@ public class Converter extends CtAbstractVisitor {
   }
 
   private static List<JavadocElement> getJavadocComment(CtElement element) {
-    List<JavadocElement> elements = element.getComments()
-        .stream()
-        .filter(comment -> comment instanceof CtJavaDoc)
-        .map(comment -> new JavadocParser(comment.getRawContent(), element))
-        .map(JavadocParser::parse)
-        .flatMap(Collection::stream)
-        .toList();
+    JavadocCommentView view = new JavadocCommentView(JavadocParser.forElement(element));
 
-    return new ReferenceConversionVisitor().convertElements(elements);
+    return new ReferenceConversionVisitor().convertElements(
+        new InheritanceResolver().completeJavadocWithInheritedTags(element, view)
+    );
   }
-
 
 }

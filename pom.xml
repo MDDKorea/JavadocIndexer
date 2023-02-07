@@ -85,7 +85,7 @@
     <dependency>
       <groupId>com.github.I-Al-Istannen</groupId>
       <artifactId>spoon</artifactId>
-      <version>270e9127652cbbb96fb55f8b233cad06354493b2</version>
+      <version>a2b0c7eea00dfa98a3b32b9126a3b1afcfc37b0f</version>
     </dependency>
     <dependency>
       <groupId>com.squareup.moshi</groupId>
