@@ -82,7 +82,7 @@ public class Indexer {
     System.out.println(heading("Converting Spoon Model "));
     Converter converter = new Converter();
     ParallelProcessor processor = new ParallelProcessor(
-        new IndexerFilterChain(config.allowedPackages()).asFilter(),
+        new IndexerFilterChain(model, config.allowedPackages()).asFilter(),
         Runtime.getRuntime().availableProcessors() - 1
     );
     timings.measure("process-model", () -> {

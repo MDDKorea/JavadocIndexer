@@ -2,7 +2,11 @@ package de.ialistannen.javadocbpi.spoon;
 
 import static de.ialistannen.javadocbpi.spoon.FluentFilter.forType;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import spoon.reflect.CtModel;
 import spoon.reflect.declaration.CtConstructor;
 import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
@@ -15,8 +19,15 @@ public class IndexerFilterChain {
 
   private final Set<String> packageWhitelist;
 
-  public IndexerFilterChain(Set<String> packageWhitelist) {
-    this.packageWhitelist = Set.copyOf(packageWhitelist);
+  public IndexerFilterChain(CtModel model, Set<String> packageOrModuleWhitelist) {
+    this.packageWhitelist = packageOrModuleWhitelist.stream()
+        .filter(it -> !it.endsWith("/"))
+        .collect(Collectors.toCollection(HashSet::new));
+
+    packageOrModuleWhitelist.stream()
+        .filter(it -> it.endsWith("/"))
+        .flatMap(it -> exportedPackages(model, it))
+        .forEach(this.packageWhitelist::add);
   }
 
   public FluentFilter asFilter() {
@@ -31,6 +42,15 @@ public class IndexerFilterChain {
     filter = filter.or(forType(CtModule.class, ignored -> true));
 
     return filter;
+  }
+
+  private Stream<String> exportedPackages(CtModel model, String moduleName) {
+    return model.getAllModules()
+        .stream()
+        .filter(module -> module.getSimpleName().equals(moduleName.replace("/", "")))
+        .flatMap(module -> module.getExportedPackages().stream())
+        .filter(exportedPackage -> exportedPackage.getTargetExport().isEmpty())
+        .map(exportedPackage -> exportedPackage.getPackageReference().getQualifiedName());
   }
 
   private boolean includePackage(CtPackage it) {

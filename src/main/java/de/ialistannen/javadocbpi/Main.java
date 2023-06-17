@@ -70,7 +70,7 @@ public class Main {
     System.out.println(heading("Converting Spoon Model "));
     Converter converter = new Converter();
     ParallelProcessor processor = new ParallelProcessor(
-        new IndexerFilterChain(Set.of("*")).asFilter(),
+        new IndexerFilterChain(model, Set.of("*")).asFilter(),
         1
     );
     timings.measure("process-model", () -> {
