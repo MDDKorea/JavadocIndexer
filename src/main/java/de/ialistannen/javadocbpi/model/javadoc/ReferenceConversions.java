@@ -23,6 +23,7 @@ import spoon.reflect.reference.CtModuleReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtReference;
 import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.visitor.CtScanner;
 
 public class ReferenceConversions {
 
@@ -108,7 +109,7 @@ public class ReferenceConversions {
   }
 
   public static String renderTypeReference(CtTypeReference<?> reference) {
-    String ref = unqualifyReference(reference.toString());
+    String ref = unqualifyReference(reference);
     if (reference.isParentInitialized()
         && reference.getParent() instanceof CtParameter<?> param
         && param.isVarArgs()) {
@@ -118,6 +119,26 @@ public class ReferenceConversions {
       ref += "...";
     }
     return ref;
+  }
+
+  /**
+   * Replaces all qualified names in a reference by their unqualified form.
+   *
+   * @param reference the reference to convert
+   * @return a converted clone
+   */
+  private static String unqualifyReference(CtTypeReference<?> reference) {
+    CtTypeReference<?> newRef = reference.clone()
+        .setParent(reference.isParentInitialized() ? reference.getParent() : null);
+
+    newRef.accept(new CtScanner() {
+      @Override
+      public <T> void visitCtTypeReference(CtTypeReference<T> reference) {
+        reference.setPackage(reference.getFactory().createPackageReference());
+        super.visitCtTypeReference(reference);
+      }
+    });
+    return newRef.toString().replace("\n", " ");
   }
 
   public static String unqualifyReference(String fqn) {
