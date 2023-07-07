@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <moshi.version>1.14.0</moshi.version>
     <jackson.version>2.15.0</jackson.version>
-    <spoon.version>10.4.0-SNAPSHOT</spoon.version>
+    <spoon.version>10.4.0</spoon.version>
   </properties>
 
   <build>
