@@ -10,9 +10,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <moshi.version>1.14.0</moshi.version>
-    <jackson.version>2.15.0</jackson.version>
-    <spoon.version>10.4.0</spoon.version>
+    <moshi.version>1.15.1</moshi.version>
+    <jackson.version>2.17.0</jackson.version>
+    <spoon.version>11.0.0</spoon.version>
   </properties>
 
   <build>
@@ -20,18 +20,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.12.1</version>
         <configuration>
-          <source>20</source>
-          <target>20</target>
-          <compilerArgs>--enable-preview</compilerArgs>
+          <source>22</source>
+          <target>22</target>
         </configuration>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.0</version>
         <executions>
           <execution>
             <id>sources-jar</id>
@@ -46,7 +45,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <id>shade</id>
@@ -106,18 +105,18 @@
     <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
-      <version>3.41.2.2</version>
+      <version>3.44.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.15.3</version>
+      <version>1.17.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-html2md-converter -->
     <dependency>
       <groupId>com.vladsch.flexmark</groupId>
       <artifactId>flexmark-html2md-converter</artifactId>
-      <version>0.64.0</version>
+      <version>0.64.8</version>
     </dependency>
 
     <dependency>
@@ -134,7 +133,7 @@
     <dependency>
       <groupId>org.gradle</groupId>
       <artifactId>gradle-tooling-api</artifactId>
-      <version>8.0-rc-2</version>
+      <version>8.7-rc-4</version>
     </dependency>
 
   </dependencies>
